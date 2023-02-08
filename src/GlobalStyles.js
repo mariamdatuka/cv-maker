@@ -9,9 +9,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   @font-face {
-    font-family: MyFont;
-    src: url("/src/fonts/HelveticaNeue.ttf");
-  }
+  font-family: MyFont;
+  src: url("/src/fonts/HelveticaNeue(7).ttc") format("TTC");
+}
 
   body {
     font-family:MyFont;
