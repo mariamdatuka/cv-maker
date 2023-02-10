@@ -4,7 +4,7 @@ import check from '../../assets/check.png'
 import err from '../../assets/error.png'
 
 const Textarea = (props) => {
-    const {label, touched, id, helper, error, value,inlineStyle,onChange}=props
+    const {label, touched, id, helper, error, value,inlineStyle,onChange, rows,cols}=props
   return (
     <>
     <Container>
@@ -16,7 +16,9 @@ const Textarea = (props) => {
              value={value} 
              onChange={onChange} 
              error={error}
-             touched={touched}/> 
+             touched={touched}
+             rows={rows}
+             cols={cols}/> 
          <span>{helper}</span>
       </Wrapper>
          <Error error={error}>

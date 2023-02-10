@@ -2,10 +2,10 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-const Button = ({name, style, type}) => {
+const Button = ({name, style, type, onClick}) => {
   return (
     <>
-    <Next type={type} style={style}>{name}</Next>
+    <Next onClick={onClick} type={type} style={style}>{name}</Next>
     </>
   )
 }

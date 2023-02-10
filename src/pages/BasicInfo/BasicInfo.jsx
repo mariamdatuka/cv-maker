@@ -7,15 +7,25 @@ import {GridContainer,GridItem,GridItemTwo, Upload } from './Styles'
 import { useFormik } from "formik";
 import * as yup from 'yup';
 import CV from '../../components/CV/CV'
+import { useNavigate } from 'react-router-dom';
 
 
 const BasicInfo = () => {
-  /*const [file, setFile] = useState(null);
+  const [formData, setFormData] = useState({});
+
+  const navigate = useNavigate(); 
+ 
+  /*
   const [previewUrl, setPreviewUrl] = useState(null);
   */
+ 
+ /*useEffect(() => {
+  localStorage.setItem("formData", JSON.stringify(formData));
+}, [formData]);
+*/
 
   const hiddenFileInput=useRef(null);
-
+        
   /*useEffect(() => {
     return () => {
       if (previewUrl) {
@@ -24,17 +34,13 @@ const BasicInfo = () => {
     };
   }, [previewUrl]);
 */
-  const handleClick=e=>{
+  const handleClick=()=>{
     hiddenFileInput.current.click();
   }
 
-   /* const handleChange = (event) => {
-      formik.handleChange(event);
-      setValues(onChange(formik.values));
-    };
-    */
-     /*setPreviewUrl(URL.createObjectURL(file));*/
-
+  const handleFileChange = (event) => {
+    formik.setFieldValue('image', event.currentTarget.files[0]);
+  };
 
   const validationSchema=yup.object({
     name:yup
@@ -54,14 +60,17 @@ const BasicInfo = () => {
     phone_number:yup
       .string()
       .required()
-      .matches( /^\+995\s5\d{2}\s\d{2}\s\d{2}\s\d{2}$/),
+      .matches(/^\+995\s5\d{2}\s\d{2}\s\d{2}\s\d{2}$/),
+    image:yup
+     .mixed()
+     .required()
   })
 
   const formik=useFormik({
     initialValues:{
       name:localStorage.getItem('name') || '',
       surname:localStorage.getItem('surname') || '',
-      image:localStorage.getItem('image') || '',
+      image: localStorage.getItem('image') || '',
       about_me:localStorage.getItem('about_me') || '',
       email:localStorage.getItem('email') || '',
       phone_number:localStorage.getItem('phone_number') || ''
@@ -69,6 +78,11 @@ const BasicInfo = () => {
     validationSchema,
     onSubmit:(values)=>{
       console.log(values);
+      setFormData(values);
+      const formData = new FormData();
+      formData.append("image", values.image);
+      console.log(formData)
+      navigate('/experience'); 
     },
   })
 
@@ -79,8 +93,8 @@ const BasicInfo = () => {
     localStorage.setItem('phone_number', formik.values.phone_number);
     localStorage.setItem('about_me', formik.values.about_me);
     localStorage.setItem('image', formik.values.image);
-    
-  }, [formik.values]);
+
+    }, [formik.values]);
 
   return (
     <> 
@@ -119,10 +133,12 @@ const BasicInfo = () => {
               <Input
                 id='image'
                 type='file'
-                value={formik.values.image}
-                onChange={formik.handleChange}
+                accept='image/*'
+                onChange={handleFileChange}
                 inlineStyle={{display:'none'}}
                 ref={hiddenFileInput}
+                error={Boolean(formik.errors.image && formik.touched.image)}
+                touched={Boolean(formik.touched.image)}
                 />
                 </div>
             <div style={{display:'flex', flexDirection:'column', gap:'40px', paddingTop:'50px'}}>
@@ -132,6 +148,8 @@ const BasicInfo = () => {
                 type='text'
                 value={formik.values.about_me}
                 onChange={formik.handleChange}
+                rows={3}
+                cols={3}
                 placeholder='ზოგადი ინფო ჩემს შესახებ'
                 />
               <Input 
@@ -156,10 +174,9 @@ const BasicInfo = () => {
                 inlineStyle={{width:'770px', height:'50px'}}
                 error={Boolean(formik.errors.phone_number && formik.touched.phone_number)}
                 touched={Boolean(formik.touched.phone_number)}/>
-                <Button type='submit'name='შემდეგი' style={{alignSelf:'end', marginBottom:'50px', marginTop:'100px'}}/>
+                <Button name='შემდეგი'type='submit'style={{alignSelf:'end', marginBottom:'50px', marginTop:'100px'}}/>
             </div>
            </form>
-          
          </GridItem>
          <GridItemTwo>
             <CV values={formik.values}/>
