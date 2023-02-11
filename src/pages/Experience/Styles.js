@@ -13,3 +13,5 @@ export const GridItem=styled.div`
 export const GridItemTwo=styled.div`
       
 `
+export const InfoBox=styled.div`
+`

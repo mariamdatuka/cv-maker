@@ -5,7 +5,7 @@ import err from '../../assets/error.png'
 
 
 const Input = React.forwardRef((props,ref)=> {
-    const {label, type, accept,touched, id, helper, error, value,inlineStyle,onChange}=props
+    const {name, placeholder,label, type, accept,touched, id, helper, error, value,inlineStyle,onChange}=props
   return (
     <>
     <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
@@ -13,8 +13,10 @@ const Input = React.forwardRef((props,ref)=> {
          <label>{label}</label>
          <InputField 
              id={id} 
+             name={name}
              type={type}
              accept={accept}
+             placeholder={placeholder}
              style={inlineStyle} 
              ref={ref}
              value={value} 

@@ -22,3 +22,6 @@ export const Upload=styled.button`
     cursor:pointer;
     border-radius:4px;
 `
+
+
+

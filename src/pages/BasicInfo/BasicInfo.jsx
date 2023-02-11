@@ -11,19 +11,11 @@ import { useNavigate } from 'react-router-dom';
 
 
 const BasicInfo = () => {
-  const [formData, setFormData] = useState({});
-
+ 
+  const [data, setData]=useState({});
+  
   const navigate = useNavigate(); 
  
-  /*
-  const [previewUrl, setPreviewUrl] = useState(null);
-  */
- 
- /*useEffect(() => {
-  localStorage.setItem("formData", JSON.stringify(formData));
-}, [formData]);
-*/
-
   const hiddenFileInput=useRef(null);
         
   /*useEffect(() => {
@@ -39,7 +31,15 @@ const BasicInfo = () => {
   }
 
   const handleFileChange = (event) => {
-    formik.setFieldValue('image', event.currentTarget.files[0]);
+    const file = event.currentTarget.files[0];
+    const reader = new FileReader();
+  
+    reader.onload = function() {
+      const base64String = reader.result;
+      formik.setFieldValue('image', base64String);
+    };
+  
+    reader.readAsDataURL(file);
   };
 
   const validationSchema=yup.object({
@@ -62,40 +62,39 @@ const BasicInfo = () => {
       .required()
       .matches(/^\+995\s5\d{2}\s\d{2}\s\d{2}\s\d{2}$/),
     image:yup
-     .mixed()
-     .required()
+      .mixed()
+      .required()
   })
 
+  const initialValues={
+      name: localStorage.getItem('name')||'',
+      surname: localStorage.getItem('surname')||'',
+      image: localStorage.getItem('image')||'',
+      about_me:localStorage.getItem('about_me')||'',
+      email:localStorage.getItem('email')||'',
+      phone_number:localStorage.getItem('phone_number')||'',
+  }
+
   const formik=useFormik({
-    initialValues:{
-      name:localStorage.getItem('name') || '',
-      surname:localStorage.getItem('surname') || '',
-      image: localStorage.getItem('image') || '',
-      about_me:localStorage.getItem('about_me') || '',
-      email:localStorage.getItem('email') || '',
-      phone_number:localStorage.getItem('phone_number') || ''
-    },
-    validationSchema,
-    onSubmit:(values)=>{
+    initialValues,
+     validationSchema,
+     onSubmit:(values)=>{
       console.log(values);
-      setFormData(values);
-      const formData = new FormData();
-      formData.append("image", values.image);
-      console.log(formData)
+      setData(values);
+      localStorage.setItem("formData", JSON.stringify(values));
       navigate('/experience'); 
     },
   })
 
-  useEffect(() => {
+  useEffect(()=>{
     localStorage.setItem('name', formik.values.name);
     localStorage.setItem('surname', formik.values.surname);
-    localStorage.setItem('email', formik.values.email);
-    localStorage.setItem('phone_number', formik.values.phone_number);
-    localStorage.setItem('about_me', formik.values.about_me);
     localStorage.setItem('image', formik.values.image);
-
-    }, [formik.values]);
-
+    localStorage.setItem('phone_number', formik.values.phone_number);
+    localStorage.setItem('email', formik.values.email);
+    localStorage.setItem('about_me', formik.values.about_me);
+   }, [formik.values])
+   
   return (
     <> 
       <GridContainer>

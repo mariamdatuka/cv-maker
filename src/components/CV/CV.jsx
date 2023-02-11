@@ -1,3 +1,4 @@
+import { Formik } from 'formik';
 import React from 'react'
 import mail from '../../assets/mail.png'
 import mobile from '../../assets/mobile.png'
@@ -29,14 +30,14 @@ const CV = ({values}) => {
         values.about_me&&
         <About>
           <h4>ჩემს შესახებ</h4>
-          <div>{values.about_me}</div>
+          <div style={{wordBreak:'break-all'}}>{values.about_me}</div>
         </About>
      }
      </Wrapper>
      {
         values.image&&
         <div style={{width:'230px', height:'230px', borderRadius:'50%', border:'1px solid red'}}>
-             
+             <img style={{objectFit:'fill', width:'100%', height:'100%', borderRadius:'50%'}}src={values.image} alt='img'/>
         </div>
      }
    </Container>
