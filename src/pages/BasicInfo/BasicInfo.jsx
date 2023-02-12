@@ -9,23 +9,38 @@ import * as yup from 'yup';
 import CV from '../../components/CV/CV'
 import { useNavigate } from 'react-router-dom';
 
+const initialValues={
+  name: '',
+  surname: '',
+  image: '',
+  about_me:'',
+  email:'',
+  phone_number:'',
+}
+
 
 const BasicInfo = () => {
+  
+const [data, setData]=useState(()=>{
+  const savedData = localStorage.getItem("infoData");
+  return savedData ? JSON.parse(savedData) : initialValues;
+ }
+ );
  
-  const [data, setData]=useState({});
+ 
+  /*function getFormValues() {
+    const storedValues = localStorage.getItem('infoData');
+    if(!storedValues)
+    return initialValues;
+    else{
+    return ((JSON.parse(storedValues)));
+    }
+  }
+  */
   
   const navigate = useNavigate(); 
- 
   const hiddenFileInput=useRef(null);
-        
-  /*useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-*/
+
   const handleClick=()=>{
     hiddenFileInput.current.click();
   }
@@ -66,35 +81,22 @@ const BasicInfo = () => {
       .required()
   })
 
-  const initialValues={
-      name: localStorage.getItem('name')||'',
-      surname: localStorage.getItem('surname')||'',
-      image: localStorage.getItem('image')||'',
-      about_me:localStorage.getItem('about_me')||'',
-      email:localStorage.getItem('email')||'',
-      phone_number:localStorage.getItem('phone_number')||'',
-  }
 
   const formik=useFormik({
-    initialValues,
+    initialValues:data,
      validationSchema,
      onSubmit:(values)=>{
-      console.log(values);
-      setData(values);
-      localStorage.setItem("formData", JSON.stringify(values));
       navigate('/experience'); 
     },
   })
 
   useEffect(()=>{
-    localStorage.setItem('name', formik.values.name);
-    localStorage.setItem('surname', formik.values.surname);
-    localStorage.setItem('image', formik.values.image);
-    localStorage.setItem('phone_number', formik.values.phone_number);
-    localStorage.setItem('email', formik.values.email);
-    localStorage.setItem('about_me', formik.values.about_me);
+    localStorage.setItem('infoData', JSON.stringify(formik.values));
+    setData(formik.values);
    }, [formik.values])
-   
+
+
+
   return (
     <> 
       <GridContainer>
@@ -178,7 +180,7 @@ const BasicInfo = () => {
            </form>
          </GridItem>
          <GridItemTwo>
-            <CV values={formik.values}/>
+            <CV data={data}/>
          </GridItemTwo>
       </GridContainer>
      

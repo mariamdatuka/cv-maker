@@ -1,43 +1,42 @@
-import { Formik } from 'formik';
 import React from 'react'
 import mail from '../../assets/mail.png'
 import mobile from '../../assets/mobile.png'
 import {Container,Box,About,Wrapper} from './Styles';
 
-const CV = ({values}) => {
+const CV = ({data}) => {
 
 
   return (
     <>
      <Container>
        <Wrapper>
-         <h1>{values.name} {values.surname}</h1>
+         <h1>{data.name} {data.surname}</h1>
      {
-        values.email&&
+        data.email&&
         <Box>
            <img src={mail} alt='mail'/>
-           <p>{values.email}</p>
+           <p>{data.email}</p>
         </Box>
      }
      {
-        values.phone_number&&
+        data.phone_number&&
         <Box>
            <img src={mobile} alt='mail'/>
-           <p>{values.phone_number}</p>
+           <p>{data.phone_number}</p>
         </Box>
      }
      {
-        values.about_me&&
+        data.about_me&&
         <About>
           <h4>ჩემს შესახებ</h4>
-          <div style={{wordBreak:'break-all'}}>{values.about_me}</div>
+          <div style={{wordBreak:'break-all'}}>{data.about_me}</div>
         </About>
      }
      </Wrapper>
      {
-        values.image&&
+        data.image&&
         <div style={{width:'230px', height:'230px', borderRadius:'50%', border:'1px solid red'}}>
-             <img style={{objectFit:'fill', width:'100%', height:'100%', borderRadius:'50%'}}src={values.image} alt='img'/>
+             <img style={{objectFit:'fill', width:'100%', height:'100%', borderRadius:'50%'}}src={data.image} alt='img'/>
         </div>
      }
    </Container>

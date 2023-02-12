@@ -6,6 +6,8 @@ import Area from '../../components/Textarea/Textarea';
 import { useFormik } from "formik";
 import * as yup from 'yup';
 import Button from '../../components/Button/Button';
+import { useNavigate } from 'react-router-dom';
+import CV from '../../components/CV/CV';
 
 const initialValues={
   experiences:[
@@ -22,6 +24,8 @@ const initialValues={
 const Experience = () => {
 
  const [data,setData]=useState(getFormValues())
+
+ const navigate = useNavigate(); 
 
   function getFormValues() {
     const storedValues = localStorage.getItem('experiences');
@@ -59,6 +63,7 @@ const Experience = () => {
         initialValues:data,
         validationSchema,
         onSubmit:(values)=>{
+          navigate('/education');
           console.log(values);
         },
       })
@@ -92,7 +97,7 @@ const Experience = () => {
             {formik.values.experiences.map((item,index)=>(
             <InfoBox key={index}>
             <div style={{display:'flex', flexDirection:'column', gap:'30px', paddingTop:'80px', paddingBottom:'50px'}}>   
-              <Input 
+             <Input 
                 name={`experiences.${index}.position`}
                 label='თანამდებობა'
                 helper='მინიმუმ 2 სიმბოლო'
@@ -152,7 +157,7 @@ const Experience = () => {
                 </form>
         </GridItem>
         <GridItemTwo>
-           
+          
         </GridItemTwo>
     </GridContainer>
     </>
