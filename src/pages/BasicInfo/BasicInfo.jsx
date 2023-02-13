@@ -9,34 +9,8 @@ import * as yup from 'yup';
 import CV from '../../components/CV/CV'
 import { useNavigate } from 'react-router-dom';
 
-const initialValues={
-  name: '',
-  surname: '',
-  image: '',
-  about_me:'',
-  email:'',
-  phone_number:'',
-}
 
-
-const BasicInfo = () => {
-  
-const [data, setData]=useState(()=>{
-  const savedData = localStorage.getItem("infoData");
-  return savedData ? JSON.parse(savedData) : initialValues;
- }
- );
- 
- 
-  /*function getFormValues() {
-    const storedValues = localStorage.getItem('infoData');
-    if(!storedValues)
-    return initialValues;
-    else{
-    return ((JSON.parse(storedValues)));
-    }
-  }
-  */
+const BasicInfo = ({data, setData}) => {
   
   const navigate = useNavigate(); 
   const hiddenFileInput=useRef(null);
@@ -75,7 +49,7 @@ const [data, setData]=useState(()=>{
     phone_number:yup
       .string()
       .required()
-      .matches(/^\+995\s5\d{2}\s\d{2}\s\d{2}\s\d{2}$/),
+      .matches( /^[\+995][0-9]{12}$/im),
     image:yup
       .mixed()
       .required()
@@ -171,7 +145,7 @@ const [data, setData]=useState(()=>{
                 value={formik.values.phone_number}
                 onChange={formik.handleChange}
                 helper='უნდა აკმაყოფილებდეს ქართული მობილურის ნომრის ფორმატს'
-                placeholder='+995 555 12 34 56'
+                placeholder='+995555123456'
                 inlineStyle={{width:'770px', height:'50px'}}
                 error={Boolean(formik.errors.phone_number && formik.touched.phone_number)}
                 touched={Boolean(formik.touched.phone_number)}/>

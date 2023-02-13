@@ -9,32 +9,21 @@ import Button from '../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import CV from '../../components/CV/CV';
 
-const initialValues={
-  experiences:[
-    {
-      position:'',
-      employer:'',
-      start_date:'',
-      due_date:'',
-      description:'',
-    }
-  ]
-}
-
-const Experience = () => {
-
- const [data,setData]=useState(getFormValues())
+const Experience = ({data, experience, setExperience}) => {
+  const [numOfExperiences, setNumOfExperiences] = useState(1);
+  const addExperience = () => {
+    setNumOfExperiences((prevState) => prevState + 1);
+    formik.values.experiences.push({
+      position: "",
+      employer: "",
+      start_date: "",
+      due_date: "",
+      description: "",
+    });
+  };
 
  const navigate = useNavigate(); 
 
-  function getFormValues() {
-    const storedValues = localStorage.getItem('experiences');
-    if(!storedValues)
-    return initialValues;
-    else{
-    return  {experiences: JSON.parse(storedValues)}
-    }
-  }
   const validationSchema = yup.object().shape({
      experiences: yup.array().of(
       yup.object().shape({
@@ -60,34 +49,19 @@ const Experience = () => {
      });
   
       const formik=useFormik({
-        initialValues:data,
+        initialValues:experience,
         validationSchema,
         onSubmit:(values)=>{
           navigate('/education');
-          console.log(values);
         },
       })
-      useEffect(() => {
+      
+     useEffect(() => {
         localStorage.setItem('experiences', JSON.stringify(formik.values.experiences));
+        setExperience(formik.values.experiences);
       }, [formik.values.experiences]);
-
-      console.log(formik.values.experiences);
-    /*  function addExperience() {
-        setData(prevData => {
-          return {
-            ...prevData,
-            experiences: [...prevData.experiences, {
-              position:'',
-              employer:'',
-              start_date:'',
-              due_date:'',
-              description:''
-            }]
-          };
-        });
-      }
-      console.log(data);
-      */
+     
+    
   return (
     <>
     <GridContainer>
@@ -139,8 +113,7 @@ const Experience = () => {
                 error={formik.errors.experiences && formik.errors.experiences[index] && formik.errors.experiences[index].due_date && formik.touched.experiences && formik.touched.experiences[index] && formik.touched.experiences[index].due_date}
                 touched={formik.touched.experiences && formik.touched.experiences[index] && formik.touched.experiences[index].due_date}/>
                 </div>
-              
-              <Area
+             <Area
                 name={`experiences.${index}.description`}
                 label='აღწერა'
                 type='text'
@@ -153,11 +126,12 @@ const Experience = () => {
                 touched={formik.touched.experiences && formik.touched.experiences[index] && formik.touched.experiences[index].description}/>
              </InfoBox>
             ))}
+                 <button style={{width:'290px', height:'48px', backgroundColor:'#62A1EB',borderRadius:'8px', border:'none'}}type='button' onClick={addExperience}>მეტი გამოცდილების დამატება</button>
                 <Button name='შემდეგი'type='submit' style={{aligSelf:'end', marginBottom:'50px', marginTop:'100px'}}/>
                 </form>
         </GridItem>
         <GridItemTwo>
-          
+          <CV data={data} experience={experience}/>
         </GridItemTwo>
     </GridContainer>
     </>

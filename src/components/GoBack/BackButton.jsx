@@ -1,13 +1,14 @@
 import React from 'react'
-import { useCallback } from 'react'
 import styled from 'styled-components';
 import back from '../../assets/back.png'
+import { useNavigate } from 'react-router-dom';
 
 const BackButton = () => {
-    const handleClick=useCallback(()=>{
-        window.history.back();
-    }, []);
-
+  
+  const navigate=useNavigate();
+  const handleClick=()=>{
+    navigate('/')
+  }
   return (
     <>
      <GoBack onClick={handleClick}>

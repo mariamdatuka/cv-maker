@@ -1,10 +1,10 @@
 import React from 'react'
 import mail from '../../assets/mail.png'
 import mobile from '../../assets/mobile.png'
-import {Container,Box,About,Wrapper} from './Styles';
+import {Container,Box,About,Wrapper, ImgBox, ExperienceBox,Education} from './Styles';
 
-const CV = ({data}) => {
-
+const CV = ({data, experience, education}) => {
+  
 
   return (
     <>
@@ -35,11 +35,39 @@ const CV = ({data}) => {
      </Wrapper>
      {
         data.image&&
-        <div style={{width:'230px', height:'230px', borderRadius:'50%', border:'1px solid red'}}>
-             <img style={{objectFit:'fill', width:'100%', height:'100%', borderRadius:'50%'}}src={data.image} alt='img'/>
-        </div>
+        <ImgBox>
+             <img src={data.image} alt='img'/>
+        </ImgBox>
      }
    </Container>
+   <ExperienceBox>
+    {
+      Array.isArray(experience)&&
+      experience.map((item,index)=>(
+         <div key={index} style={{display:'flex', flexDirection:'column', gap:'7px', marginBottom:'20px'}}>
+            <h5>გამოცდილება</h5>
+           <div style={{display:'flex', alignItems:'center',gap:'5px'}}>
+              <p>{item.position}</p>
+              <p>{item.employer}</p>
+            </div>  
+            <span>{item.start_date} {item.due_date}</span>
+            <div style={{wordBreak:'break-all', width:'500px'}}>{item.description}</div>
+         </div>
+      ))
+    }
+   </ExperienceBox>
+   <Education>
+      {Array.isArray(education)&&
+        education.map((item,index)=>(
+         <div key={index} style={{display:'flex', flexDirection:'column', gap:'7px', marginBottom:'20px'}}>
+            <h5>განათლება</h5>
+            <p>{item.institute}{item.degree}</p>
+            <span>{item.due_date}</span>
+            <div style={{wordBreak:'break-all', width:'500px'}}>{item.description}</div>
+         </div>
+      ))
+    }
+   </Education>
     </>
   )
 }
